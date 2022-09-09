@@ -1,19 +1,17 @@
 from flask_app import app
 from flask import render_template, redirect, request, session, flash
 from flask_app.models.user import User
+from flask_app.models.post import Post
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)
 @app.route("/")
 def index():
     # call the get all classmethod to get all friends
     return render_template("index.html")
-@app.route("/dashboard")
+@app.route("/wall")
 def show():
-    data = {
-        'id': session['user']
-    }
-    user = User.get_one(data)
-    return render_template("dashboard.html", user = user)
+    posts = Post.get_all_posts()
+    return render_template("wall.html", posts = posts)
 @app.route("/create_user", methods=['POST'])
 def create_user():
     data = {
@@ -30,7 +28,7 @@ def create_user():
     print("S E S S I O N")
     session['user'] = current_user
     print(session['user'])
-    return redirect('/dashboard')
+    return redirect('/wall')
 @app.route("/login", methods=['POST'])
 def login():
     data = {
@@ -45,7 +43,7 @@ def login():
         flash("Email Does Not Exist!")
         return redirect('/')
     session['user'] = user.id        
-    return redirect('/dashboard')
+    return redirect('/wall')
 @app.route("/logout")
 def logout():
     session.clear()

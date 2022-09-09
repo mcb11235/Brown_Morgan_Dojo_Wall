@@ -1,0 +1,9 @@
+<h1>Dojo Wall</h1>
+<form action="/publish" method="POST">
+    <label for="content">Create a new post:</label>
+    <textarea rows="10" cols="30" name="content"></textarea>
+    <input type="submit" value="publish">
+</form>
+{% for post in posts %}
+    <div>{{post.content}}</div>
+{% endfor %}
